@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeBI | GateWay Console</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css?family=Inconsolata');
+
+    body {
+      background-color: #202020;
+      font-family: Inconsolata;
+      color: #B9B9B9;
+      font-size: 12px;
+    }
+
+    *::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: #1f1f1f00;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background-color: #0000005b;
+      border-radius: 0px;
+    }
+	</style>
+</head>
+<body>
+  
+  <div id="console" style="width: 100%; height: 100%;"></div>
+
+<script>
+
+  function main () {
+    const { exec } = require('shelljs');
+    const path = require('path');
+    const IniFile = require(path.join(__dirname, '../Libraries/ini_manager')).IniFile;
+    const Convert = require('ansi-to-html');
+    const convert = new Convert();
+
+    let {DebiGate} = new IniFile('settings').get()
+    let cnsl = document.querySelector('#console')
+
+
+    function log(data) {
+      console.log(data)
+      cnsl.innerHTML += convert.toHtml(data.toString().replaceAll('\n', '<br>'))
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+
+
+    console.log(DebiGate.Path_Node);
+    console.log(DebiGate.Path_GateWay);
+
+    let killcmd = 'taskkill /IM "nodeAKT.exe" /F'
+    log(killcmd + "<br>")
+    var killp = exec(killcmd, {async:true})
+    killp.stdout.on('data', function(data) { log(data) });
+    killp.stderr.on('data', function(data) { log(data) })
+
+    setTimeout(() => {
+      let start_cmd = '"' + DebiGate.Path_Node + '" "' + DebiGate.Path_GateWay + 'index.js"'
+      log(start_cmd + "<br>")
+
+      var child = exec(start_cmd, {async:true});
+
+      child.stdout.on('data', function(data) { log(data) });
+      child.stderr.on('data', function(data) { log(data) })
+    }, 1500);
+  }
+
+  window.onload = main();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <title>DeBI | Designable BI</title>
+  <meta name="author" content="Akatron Network" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" media="screen" href="css/style.css">
+  <link rel="stylesheet" media="screen" href="css/login.css">
+</head>
+<body>
+
+
+<div class="container" id="container">
+	<div class="form-container sign-up-container">
+		<div class="form">
+			<h1>Hesap Oluştur</h1>
+			<input type="text" placeholder="Kullanıcı Adı*" />
+			<input type="email" placeholder="Email*" />
+			<input type="text" placeholder="Üyelik Anahtar Kodu*" />
+			<input type="password" placeholder="Şifre*" />
+			<input type="password" placeholder="Şifre Tekrar*" />
+			<button class="register-btn">Kayıt Ol</button>
+		</div>
+	</div>
+	<div class="form-container sign-in-container">
+		<div class="form">
+			<h1>Giriş Yap</h1>
+			<input type="text" placeholder="Kullanıcı Adı" id="login_username"/>
+			<input type="password" placeholder="Şifre" id="login_password"/>
+			<button class="login-btn" id="login_btn">Giriş Yap</button>
+		</div>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<img class="logo" src="img/debi-icon.png" alt="">
+				<a href="#" class="logo-title">DeBI</a>
+        <a href="#" class="logo-text">Designable Business Intelligence</a>
+				<button class="overlay-btn ghost" id="signIn">Giriş Yap</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<img class="logo" src="img/debi-icon.png" alt="">
+				<a href="#" class="logo-title">DeBI</a>
+        <a href="#" class="logo-text">Designable Business Intelligence</a>
+				<button class="overlay-btn ghost" id="signUp">Kayıt Ol</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- particles.js container -->
+<div id="particles-js"></div>
+
+<script src="js/particles.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+
+	const electron = require('electron');
+	const { ipcRenderer } = electron;
+
+  const loginbtn = document.getElementById('login_btn');
+  loginbtn.addEventListener('click', () => {
+
+		let username_inp = document.getElementById('login_username')
+		let password_inp = document.getElementById('login_password')
+
+		let username = username_inp.value
+		let password = password_inp.value
+
+		if (!(username.length > 0)) { 
+			username_inp.style.backgroundColor = 'rgba(255, 0, 0, 0.1)'
+			username_inp.style.transform = "scale(1.02)"
+
+			setTimeout(() => {
+				username_inp.style.backgroundColor = ""
+				username_inp.style.transform = ""
+			}, 1500)
+
+			return;
+		}
+
+		if (!(password.length > 0)) {
+			password_inp.style.backgroundColor = 'rgba(255, 0, 0, 0.1)'
+			password_inp.style.transform = "scale(1.02)"
+
+			setTimeout(() => {
+				password_inp.style.backgroundColor = ""
+				password_inp.style.transform = ""
+			}, 1500)
+
+			return;
+		}
+
+    ipcRenderer.send('login', {
+			username: username,
+			password: password
+		});
+  });
+</script>
+
+</body>
+</html>

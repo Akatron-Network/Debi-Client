@@ -3,8 +3,11 @@ const ini = require('ini');
 const path = require('path');
 
 class IniFile {
-  constructor(ini_name) {
-    this.filepath = path.join(__dirname, "../" + ini_name + ".ini")
+  constructor(iniPath, fullPath = false) {
+    if (fullPath) {
+      this.filepath = iniPath
+    }
+    else this.filepath = path.join(__dirname, "../" + iniPath + ".ini")
   }
 
   get() {

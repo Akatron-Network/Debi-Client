@@ -9,16 +9,22 @@ const {app, BrowserWindow, Menu, ipcMain, nativeImage} = electron
 
 let mainWindow, consoleWindow;
 
-app.on('ready', () => {
+app.commandLine.appendSwitch('disable-web-security')
+app.commandLine.appendSwitch('disable-gpu')
+app.commandLine.appendSwitch('user-data-dir', '~/chromeTemp')
+app.commandLine.appendSwitch('disable-site-isolation-trials')
+
+
+function mainWindowConstruct() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 700,
     maximizable: true,
     autoHideMenuBar: true,
     webPreferences: {
-      webSecurity: false,
-      allowRunningInsecureContent: true,
-      allowDisplayingInsecureContent: true,
+      // webSecurity: false,
+      // allowRunningInsecureContent: true,
+      // allowDisplayingInsecureContent: true,
       nodeIntegration: true,
       contextIsolation: false,
     }
@@ -34,7 +40,10 @@ app.on('ready', () => {
   mainWindow.on('close', () => {
     app.exit();
   })
+}
 
+
+function consoleWindowConstruct() {
   consoleWindow = new BrowserWindow({
     autoHideMenuBar: true,
     // show: false,
@@ -59,14 +68,24 @@ app.on('ready', () => {
     event.preventDefault()
     consoleWindow.hide()
   })
+}
+
+
+app.on('ready', () => {
+  mainWindowConstruct()
+  consoleWindowConstruct()
+  
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(mainMenuTemplate))
 
   ipcMain.on('login', async (err, data) => {
     let service = new Service();
     let log_resp = await service.login(data.username, data.password);
-    console.log(log_resp);
-    if (log_resp) service.init(mainWindow, undefined);
+    
+    if (log_resp) {
+      service.init(mainWindow);
+      consoleWindow.reload();
+    }
     else mainWindow.webContents.executeJavaScript('loginerr();', true)
   })
 

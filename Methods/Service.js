@@ -1,11 +1,13 @@
 const axios = require('axios');
 const path = require('path');
+const url = require('url');
 const IniFile = require(path.join(__dirname, '../Libraries/ini_manager')).IniFile;
 
 
 class Service {
   constructor() {
     this.settings = (new IniFile('settings')).get()
+    this.gateIni = (new IniFile(this.settings.DebiGate.Path_GateWay + "user.ini", true))
   }
 
   async login(username, password) {
@@ -36,26 +38,41 @@ class Service {
       }
       else throw e
     }
+    console.log(this.gateIni.get());
     
     if (resp.data.Success) {
       this.token = resp.data.Token
       this.gateToken = gateresp.data.Token
-      this.userData = resp.data.data
+      this.gatePass = gateresp.data.Data.password
+      this.userData = resp.data.Data
+
+      console.log(this.userData);
+
+      let nGateIni = {...this.gateIni.get()}
+      nGateIni.DebiGateWay.username = this.userData.username
+      nGateIni.DebiGateWay.password = this.gatePass
+
+      this.gateIni.set(nGateIni);
+      console.log(this.gateIni.get());
+
       return true
     }
     else return false
 
   }
 
-  init(browserWindow, gateUserIni) {
-    browserWindow.webContents
-    .executeJavaScript('location.href = "http://debiapi.akatron.net:3000/";', true)
-    .then(result => {
-      browserWindow.webContents.executeJavaScript('localStorage.setItem("Token", "' + this.token + '");', true).then(result => {
-        browserWindow.reload();
-      })
-    })
-
+  init(browserWindow) {
+    browserWindow.loadURL("http://debiapi.akatron.net:3000/")
+    browserWindow.webContents.executeJavaScript(
+      'localStorage.setItem("Token", "' + this.token + '"); location.reload();', true
+    )
+    browserWindow.webPreferences = {
+      webSecurity: false,
+      allowRunningInsecureContent: true,
+      allowDisplayingInsecureContent: true,
+      nodeIntegration: true,
+      contextIsolation: false,
+    }
     browserWindow.maximize();
 
   }

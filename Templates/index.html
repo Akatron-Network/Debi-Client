@@ -5,11 +5,15 @@
   <title>DeBI | Designable BI</title>
   <meta name="author" content="Akatron Network" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" media="screen" href="css/style.css">
   <link rel="stylesheet" media="screen" href="css/login.css">
+  <link rel="stylesheet" media="screen" href="css/loading.css">
 </head>
 <body>
-
+	<div id="loading_div">
+		<div id="loading"></div>
+	</div>
 
 <div class="container" id="container">
 	<div class="form-container sign-up-container">
@@ -28,6 +32,7 @@
 			<h1>Giriş Yap</h1>
 			<input type="text" placeholder="Kullanıcı Adı" id="login_username"/>
 			<input type="password" placeholder="Şifre" id="login_password"/>
+			<div id="login_error">Kullanıcı adı ya da şifre yanlış!</div>
 			<button class="login-btn" id="login_btn">Giriş Yap</button>
 		</div>
 	</div>
@@ -52,9 +57,9 @@
 <!-- particles.js container -->
 <div id="particles-js"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js" integrity="sha512-rpLlll167T5LJHwp0waJCh3ZRf7pO6IT1+LZOhAyP6phAirwchClbTZV3iqL3BMrVxIYRbzGTpli4rfxsCK6Vw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="js/particles.js"></script>
 <script src="js/app.js"></script>
-
 <script>
 
 	const electron = require('electron');
@@ -62,6 +67,8 @@
 
   const loginbtn = document.getElementById('login_btn');
   loginbtn.addEventListener('click', () => {
+
+		document.getElementById('loading_div').style.display = 'block';
 
 		let username_inp = document.getElementById('login_username')
 		let password_inp = document.getElementById('login_password')
@@ -98,6 +105,12 @@
 			password: password
 		});
   });
+
+	function loginerr() {
+		document.getElementById('login_error').style.display = 'block';
+		document.getElementById('loading_div').style.display = '';
+	}
+
 </script>
 
 </body>

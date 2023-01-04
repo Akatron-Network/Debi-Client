@@ -56,6 +56,8 @@ class Service {
       })
     })
 
+    browserWindow.maximize();
+
   }
 }
 

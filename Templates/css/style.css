@@ -97,3 +97,30 @@ canvas{
   background-position: 50% 50%;
   background-repeat: no-repeat;
 }
+
+
+#login_error {
+  color: rgb(220 38 38);
+  letter-spacing: 0.5px;
+  padding: 2px;
+  display: none;
+}
+/* 
+.loading {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.3);
+  top: 0;
+  right: 0;
+}
+
+.loading svg {
+  font-size: 100px;
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translateY(-50%) translateX(-50%);
+} */

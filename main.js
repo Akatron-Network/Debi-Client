@@ -66,8 +66,8 @@ app.on('ready', () => {
     let service = new Service();
     let log_resp = await service.login(data.username, data.password);
     console.log(log_resp);
-    service.init(mainWindow, undefined);
-    
+    if (log_resp) service.init(mainWindow, undefined);
+    else mainWindow.webContents.executeJavaScript('loginerr();', true)
   })
 
 })

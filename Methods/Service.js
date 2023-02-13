@@ -62,7 +62,7 @@ class Service {
   }
 
   init(browserWindow) {
-    browserWindow.loadURL("http://debiapi.akatron.net:3000/")
+    browserWindow.loadURL("http://debiapi.akatron.net/")
     browserWindow.webContents.executeJavaScript(
       'localStorage.setItem("Token", "' + this.token + '"); location.reload();', true
     )

@@ -48,7 +48,7 @@
 				<img class="logo" src="img/debi-icon.png" alt="">
 				<a href="#" class="logo-title">DeBI</a>
         <a href="#" class="logo-text">Designable Business Intelligence</a>
-				<button class="overlay-btn ghost" id="signUp">Kayıt Ol</button>
+				<button onclick="website()" class="overlay-btn ghost">Kayıt Ol</button>
 			</div>
 		</div>
 	</div>
@@ -64,6 +64,14 @@
 
 	const electron = require('electron');
 	const { ipcRenderer } = electron;
+	const { exec } = require('shelljs');
+
+	function website() {
+		
+		let websitecmd = 'explorer "https://debi.akatron.net/'
+    var websitep = exec(websitecmd, {async: true})
+	}
+
 
   const loginbtn = document.getElementById('login_btn');
   loginbtn.addEventListener('click', () => {

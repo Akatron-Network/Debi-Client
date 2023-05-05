@@ -7,7 +7,7 @@ const Service = require(path.join(__dirname, 'Methods/Service')).Service;
 
 const {app, BrowserWindow, Menu, ipcMain, nativeImage} = electron
 
-let mainWindow, consoleWindow;
+let mainWindow, consoleWindow, settingsWindow;
 
 app.commandLine.appendSwitch('disable-web-security')
 app.commandLine.appendSwitch('disable-gpu')
@@ -70,6 +70,28 @@ function consoleWindowConstruct() {
   })
 }
 
+function settingsWindowConstruct() {
+  settingsWindow = new BrowserWindow({
+    autoHideMenuBar: true,
+    width: 650,
+    height: 720,
+    webPreferences: {
+      webSecurity: false,
+      allowRunningInsecureContent: true,
+      allowDisplayingInsecureContent: true,
+      nodeIntegration: true,
+      contextIsolation: false,
+    }
+  })
+  
+  settingsWindow.setIcon(nativeImage.createFromPath('ico.png'))
+  settingsWindow.loadURL(url.format({
+    pathname: path.join(__dirname, "Templates/settings.html"),
+    protocol: "file",
+    slashes: true
+  }))
+}
+
 
 app.on('ready', () => {
   mainWindowConstruct()
@@ -104,10 +126,14 @@ const mainMenuTemplate = [
       {
         label: "Konsol",
         click(item, focusedWindow) { focusedWindow.toggleDevTools() }
-      },,
+      },
       {
         label: "GateWay",
         click(item, focusedWindow) { consoleWindow.show() }
+      },
+      {
+        label: "Ayarlar",
+        click(item, focusedWindow) { settingsWindowConstruct() }
       },
       {
         label: "Çıkış",

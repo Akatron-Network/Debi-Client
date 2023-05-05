@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "npx electron-packager \"D:\\YEDEK\\Workflow\\Akatron Network\\Debi\\Debi-Client\" Debi-Client --platform=win32 --arch=x64"
   },
   "author": "Akatron Network",
   "license": "ISC",
